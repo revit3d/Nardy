@@ -43,7 +43,7 @@ class TileExtractor:
                  gblur_kernel: Tuple[int, int] = (5, 5),
                  medblur_kernel: int = 15,
                  approx_thres: float = 0.05,
-                 equilaterial_thres: float = 0.05,
+                 equilaterial_thres: float = 0.15,
                  area_min: int = 2000,
                  area_max: int = 7000,
                  min_dist_between_centr: int = 20):
@@ -103,7 +103,7 @@ class TileExtractor:
         if self.area_min > M['m00'] or M['m00'] > self.area_max:
             return None
 
-        centroid = Point(x=M['m10'] // M['m00'], y=M['m01'] // M['m00'])
+        centroid = Point(x=int(M['m10'] / M['m00']), y=int(M['m01'] / M['m00']))
         new_contour = Contour(centroid=centroid, vertices=approx)
 
         # filter noise contours which are not equilaterial
