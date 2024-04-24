@@ -5,8 +5,8 @@ import numpy as np
 import cv2
 from cv2.typing import MatLike
 
-from .tiles_segmentation import TileExtractor, Contour
-from .tiles_classification import TileClassifier
+from tiles_segmentation import TileExtractor, Contour
+from tiles_classification import TileClassifier
 
 
 class ImageProcessor:
@@ -38,7 +38,7 @@ class ImageProcessor:
             cropped = rotated_image[y:y + size, x:x + size]
             yield cropped
 
-    def process_image(self, image_path: os.PathLike, file_path: os.PathLike) -> None:
+    def process_image(self, image: MatLike, file_path: os.PathLike) -> None:
         """
         Process image and count number of triomino tiles on the image.\\
         Then classify each tile by the dots on its vertices.
@@ -48,10 +48,6 @@ class ImageProcessor:
         - image: image suitable for requirements
         - file_path: path to the file with processing results
         """
-        image = cv2.imread(image_path)
-        if image is None:
-            raise ValueError('Bad image path')
-
         extractor = TileExtractor()
         contours = extractor.find_objects(image)
 
