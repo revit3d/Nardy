@@ -36,6 +36,12 @@ class TileClassifier:
                     image[size // 2:, :size // 2],
                     image[size // 2:, size // 2:]]
 
+        # adaptive enlightening of the image
+        enlighten_coef = 100 / np.mean(image)
+        image = (image / 255) * enlighten_coef
+        image[image > 1] = 1
+        image = (image * 255).astype(np.uint8)
+
         cls = []
         for img in clusters:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
