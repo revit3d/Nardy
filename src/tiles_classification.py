@@ -9,9 +9,9 @@ from .tiles_segmentation import Point
 
 class TileClassifier:
     def __init__(self,
-                 center_dist_thres: float=4,
-                 min_dot_r: float=2.5,
-                 max_dot_r: float=6):
+                 center_dist_thres: float = 4,
+                 min_dot_r: float = 2.5,
+                 max_dot_r: float = 6):
         self.center_dist_thres = center_dist_thres
         self.min_dot_r = min_dot_r
         self.max_dot_r = max_dot_r
@@ -50,7 +50,6 @@ class TileClassifier:
             thresh = np.zeros_like(chs[0])
             for ch in chs:
                 ch = cv2.medianBlur(ch, 3)
-                #ch = cv2.GaussianBlur(ch, (3, 3), 0)
                 t = cv2.Canny(ch, 70, 140)
                 thresh = cv2.bitwise_or(thresh, t)
 
@@ -60,9 +59,8 @@ class TileClassifier:
                 (x, y), r = cv2.minEnclosingCircle(contour)
                 center = Point(int(x), int(y))
                 dsts = [center.dist(pt) for pt in segmentated_dots]
-                if (self.min_dot_r < r < self.max_dot_r and
-                    (len(dsts) == 0 or min(dsts) > self.center_dist_thres)):
-
+                is_unique = len(dsts) == 0 or min(dsts) > self.center_dist_thres
+                if (self.min_dot_r < r < self.max_dot_r and is_unique):
                     segmentated_dots.append(center)
             cls.append(len(segmentated_dots))
         return tuple(cls)
